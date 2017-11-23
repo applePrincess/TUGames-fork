@@ -2,14 +2,17 @@
 
 using System;
 using System.Collections.Generic;
+using DrawFunc  = System.Action<System.Drawing.Graphics>;
+using InputFunc = System.Action<int, bool>;
 
 class JumpAct3 : MyForm
 {
+
     public enum Scene
     {
         Title,
         Stage,
-        GameClear,
+        StageClear,
         GameOver
     }
     public static Random      sRnd = new Random();
@@ -22,10 +25,8 @@ class JumpAct3 : MyForm
     int                       mStage = 1;
     Scene                     mScene = Scene.Title;
 
-    SortedList<Scene, Action<System.Drawing.Graphics>> drawList
-        = new SortedList<Scene, Action<System.Drawing.Graphics>>();
-    SortedList<Scene, Action<int, bool>> inputTrigger
-        = new SortedList<Scene, Action<int, bool>>();
+    SortedList<Scene, DrawFunc> drawList = new SortedList<Scene, DrawFunc>();
+    SortedList<Scene, InputFunc> inputTrigger = new SortedList<Scene, InputFunc>();
 
     protected override void OnLoad( EventArgs e )
     {
@@ -36,6 +37,8 @@ class JumpAct3 : MyForm
         inputTrigger.Add(Scene.Stage, StageInput);
         drawList.Add(Scene.Title, TitleDraw);
         drawList.Add(Scene.Stage, StageDraw);
+        drawList.Add(Scene.StageClear, StageClearDraw);
+        drawList.Add(Scene.GameOver, GameOverDraw);
     }
 
     protected override void OnKeyDown( System.Windows.Forms.KeyEventArgs e )
@@ -54,6 +57,16 @@ class JumpAct3 : MyForm
     {
         g.DrawString( "ジャンプアクション３ Jump Action3", mFont, mSBWhite, 15, 20 );
         g.DrawString( "PRESS ANY KEY", mFont, mSBWhite, 40, 40 );
+    }
+
+    protected void StageClearDraw( System.Drawing.Graphics g )
+    {
+        g.DrawString( "STAGE CLEAR!", mFont, mSBWhite, 40, 40 );
+    }
+
+    protected void GameOverDraw( System.Drawing.Graphics g )
+    {
+            g.DrawString( "GAME OVER", mFont, mSBWhite, 40, 40 );
     }
 
     protected void StageDraw( System.Drawing.Graphics g )
@@ -78,7 +91,6 @@ class JumpAct3 : MyForm
         if( sGameOver ){
             g.DrawString( "GAME OVER", mFont, mSBWhite, 40, 40 );
         }
-
     }
 
     protected override void onMyPaint( System.Drawing.Graphics g )
@@ -161,21 +173,7 @@ class JumpAct3 : MyForm
             mLEnemy.Add( new Enemy() );
         }
 
-        for( int x = 0; x < Map.sMap.GetLength( 1 ); x++ ){
-            Map.sMap[ Map.sMap.GetLength( 0 ) - 1, x ] = 1;
-        }
-
-        byte   v = 1;
-        int    n = 1;
-        for( int y = 3; y <= 12; y += 3 ){
-            for( int x = 0; x < Map.sMap.GetLength( 1 ); x++, n-- ){
-                if( n == 0 ){
-                    v = (byte)( 1 - v );
-                    n = sRnd.Next( 2 ) + v + 1;
-                }
-                Map.sMap[ y, x ] = v;
-            }
-        }
+        Map.GenerateMap(sRnd);
     }
 
     [STAThread]

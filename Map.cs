@@ -6,6 +6,25 @@ class Map
 
     public static byte[,]		sMap = new byte[ 16, 15 ];
 
+    public static void GenerateMap(Random r)
+    {
+        for( int x = 0; x < sMap.GetLength( 1 ); x++ ){
+            sMap[ sMap.GetLength( 0 ) - 1, x ] = 1;
+        }
+
+        byte   v = 1;
+        int    n = 1;
+        for( int y = 3; y <= 12; y += 3 ){
+            for( int x = 0; x < sMap.GetLength( 1 ); x++, n-- ){
+                if( n == 0 ){
+                    v = (byte)( 1 - v );
+                    n = r.Next( 2 ) + v + 1;
+                }
+                sMap[ y, x ] = v;
+            }
+        }
+    }
+
     public static void draw( Graphics g )
     {
         for( int y = 0; y < sMap.GetLength( 0 ); y++ ){
