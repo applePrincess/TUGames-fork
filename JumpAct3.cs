@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DrawFunc  = System.Action<System.Drawing.Graphics>;
 using InputFunc = System.Action<int, bool>;
 
@@ -108,23 +109,16 @@ class JumpAct3 : MyForm
 
         foreach( Player pl in mLPlayer ){
             pl.step();
-            for( int i = mLEnemy.Count - 1; i >= 0; i-- ){
-                if( pl.isCollision( mLEnemy[ i ] ) ){
-                    if( pl.getAngle4i( mLEnemy[ i ] ) == 1 ){
-                        mLEnemy.RemoveAt( i );
-                        pl.jump( -4.0f / 16 );
-                    }else{
-                        sGameOver = true;
-                    }
-                }
-            }
+            mLEnemy = mLEnemy.Aggregate(new List<Enemy>(), (lst, en) => {
+                        if(!pl.isCollision(en))  lst.Add(en);
+                        else
+                            if( pl.getAngle4i( en ) == 1 )  pl.jump( -4.0f / 16 );
+                            else sGameOver = true;
+                        return lst;
+                });
         }
 
-        for( int i = mLEnemy.Count - 1; i >= 0; i-- ){
-            Enemy	en = mLEnemy[ i ];
-            en.step( mLEnemy );
-        }
-
+        mLEnemy.ForEach(en => en.step(mLEnemy));
         Invalidate();
     }
 
