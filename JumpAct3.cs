@@ -249,12 +249,16 @@ class JumpAct3 : MyForm
 
     SortedList<Scene, Action<System.Drawing.Graphics>> drawList
         = new SortedList<Scene, Action<System.Drawing.Graphics>>();
+    SortedList<Scene, Action<int, bool>> inputTrigger
+        = new SortedList<Scene, Action<int, bool>>();
 
     protected override void OnLoad( EventArgs e )
     {
         base.OnLoad( e );
         mTimer.Interval = 25;
         mTimer.Start();
+        inputTrigger.Add(Scene.Title, TitleInput);
+        inputTrigger.Add(Scene.Stage, StageInput);
         drawList.Add(Scene.Title, TitleDraw);
         drawList.Add(Scene.Stage, StageDraw);
     }
@@ -337,13 +341,16 @@ class JumpAct3 : MyForm
         Invalidate();
     }
 
-    void input( int type, bool res )
+    void TitleInput(int type, bool res)
     {
-        if( mScene == Scene.Title ){
-            mStage = 1;
-            start();
-            mLPlayer.Add( new Player( type ) );
-        }else if( sStageClear ){
+        mStage = 1;
+        start();
+        mLPlayer.Add( new Player( type ) );
+    }
+
+    void StageInput(int type, bool res)
+    {
+        if( sStageClear ){
             mStage++;
             start();
             mLPlayer.Add( new Player( type ) );
@@ -360,6 +367,11 @@ class JumpAct3 : MyForm
         }else{
             mLPlayer[ 0 ].jump();
         }
+    }
+
+    void input( int type, bool res )
+    {
+        inputTrigger[mScene](type, res);
     }
 
     void start()
