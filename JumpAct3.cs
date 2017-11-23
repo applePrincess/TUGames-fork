@@ -196,7 +196,7 @@ class Player : Unit
         }
 
         if( mY < 1 ){
-            JumpAct3.sGameClear = true;
+            JumpAct3.sStageClear = true;
         }
     }
 }
@@ -230,23 +230,33 @@ class Enemy : Unit
 
 class JumpAct3 : MyForm
 {
-    public static Random		sRnd = new Random();
+    public enum Scene
+    {
+        Title,
+        Stage,
+        GameClear,
+        GameOver
+    }
+    public static Random      sRnd = new Random();
 
-    System.Drawing.Font			mFont = new System.Drawing.Font( "MS Gothic", 4 );
-    int							mCount;
-    List<Player>				mLPlayer;
-    List<Enemy>					mLEnemy;
-    public static bool			sGameClear, sGameOver;
-    int							mStage = 1;
-    int							mScene;
+    System.Drawing.Font       mFont = new System.Drawing.Font( "MS Gothic", 4 );
+    int                       mCount;
+    List<Player>              mLPlayer;
+    List<Enemy>               mLEnemy;
+    public static bool        sStageClear, sGameOver;
+    int                       mStage = 1;
+    Scene                     mScene = Scene.Title;
 
-    SortedList<int, Action<System.Drawing.Graphics>> drawList = new SortedList<int, Action<System.Drawing.Graphics>>();
+    SortedList<Scene, Action<System.Drawing.Graphics>> drawList
+        = new SortedList<Scene, Action<System.Drawing.Graphics>>();
+
     protected override void OnLoad( EventArgs e )
     {
         base.OnLoad( e );
         mTimer.Interval = 25;
         mTimer.Start();
-        drawList.Add(0, TitleDraw);
+        drawList.Add(Scene.Title, TitleDraw);
+        drawList.Add(Scene.Stage, StageDraw);
     }
 
     protected override void OnKeyDown( System.Windows.Forms.KeyEventArgs e )
@@ -267,15 +277,8 @@ class JumpAct3 : MyForm
         g.DrawString( "PRESS ANY KEY", mFont, mSBWhite, 40, 40 );
     }
 
-    protected override void onMyPaint( System.Drawing.Graphics g )
+    protected void StageDraw( System.Drawing.Graphics g )
     {
-        drawList[mScene](g);
-        // if( mScene == 0 ){
-        //   g.DrawString( "ジャンプアクション３ Jump Action3", mFont, mSBWhite, 15, 20 );
-        //   g.DrawString( "PRESS ANY KEY", mFont, mSBWhite, 40, 40 );
-        //   return;
-        // }
-        /*
         g.TranslateTransform( 0, -50 + mCount / 16.0f );
         Map.draw( g );
         foreach( Player pl in mLPlayer ){
@@ -289,20 +292,24 @@ class JumpAct3 : MyForm
 
         g.DrawString( "TIME " + mCount, mFont, mSBWhite, 0, 0 );
         g.DrawString( "STAGE " + mStage, mFont, mSBWhite, 40, 0 );
-
-        if( sGameClear ){
+        if( sStageClear ){
             g.DrawString( "STAGE CLEAR!", mFont, mSBWhite, 40, 40 );
         }
 
         if( sGameOver ){
             g.DrawString( "GAME OVER", mFont, mSBWhite, 40, 40 );
         }
-        */
+
+    }
+
+    protected override void onMyPaint( System.Drawing.Graphics g )
+    {
+        drawList[mScene](g);
     }
 
     protected override void onMyTimer( object sender, System.Timers.ElapsedEventArgs e )
     {
-        if( sGameClear || sGameOver ){
+        if( sStageClear || sGameOver ){
             return;
         }
 
@@ -332,11 +339,11 @@ class JumpAct3 : MyForm
 
     void input( int type, bool res )
     {
-        if( mScene == 0 ){
+        if( mScene == Scene.Title ){
             mStage = 1;
             start();
             mLPlayer.Add( new Player( type ) );
-        }else if( sGameClear ){
+        }else if( sStageClear ){
             mStage++;
             start();
             mLPlayer.Add( new Player( type ) );
@@ -357,8 +364,8 @@ class JumpAct3 : MyForm
 
     void start()
     {
-        mScene = 1;
-        sGameClear = false;
+        mScene = Scene.Stage;
+        sStageClear = false;
         sGameOver = false;
         mCount = 0;
         mLPlayer = new List<Player>();
@@ -371,8 +378,8 @@ class JumpAct3 : MyForm
             Map.sMap[ Map.sMap.GetLength( 0 ) - 1, x ] = 1;
         }
 
-        byte	v = 1;
-        int		n = 1;
+        byte   v = 1;
+        int    n = 1;
         for( int y = 3; y <= 12; y += 3 ){
             for( int x = 0; x < Map.sMap.GetLength( 1 ); x++, n-- ){
                 if( n == 0 ){
