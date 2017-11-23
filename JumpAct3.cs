@@ -30,15 +30,6 @@ class Map
 
     public static void draw( System.Drawing.Graphics g )
     {
-        /*
-        // Experimental
-        sMap.ForEachWithIndex((row, rowIdx) =>
-                              row.ForEachWithIndex((col, colIdx) => {
-                                      if(col != 0){
-                                          g.DrawImage(sBM, rowIdx * Unit.DOT, colIdx * Unit.DOT);
-                                      }
-                                  });
-        */
         for( int y = 0; y < sMap.GetLength( 0 ); y++ ){
             for( int x = 0; x < sMap.GetLength( 1 ); x++ ){
                 if( sMap[ y, x ] != 0 ){
@@ -233,8 +224,6 @@ class Enemy : Unit
         }
 
         le.ForEach( en => mightChangeDirection(en));
-        // foreach( Enemy en in le ){
-        // }
     }
 }
 
@@ -251,11 +240,13 @@ class JumpAct3 : MyForm
     int							mStage = 1;
     int							mScene;
 
+    SortedList<int, Action<System.Drawing.Graphics>> drawList = new SortedList<int, Action<System.Drawing.Graphics>>();
     protected override void OnLoad( EventArgs e )
     {
         base.OnLoad( e );
         mTimer.Interval = 25;
         mTimer.Start();
+        drawList.Add(0, TitleDraw);
     }
 
     protected override void OnKeyDown( System.Windows.Forms.KeyEventArgs e )
@@ -270,14 +261,21 @@ class JumpAct3 : MyForm
         base.OnMouseDown( e );
     }
 
+    protected void TitleDraw( System.Drawing.Graphics g )
+    {
+        g.DrawString( "ジャンプアクション３ Jump Action3", mFont, mSBWhite, 15, 20 );
+        g.DrawString( "PRESS ANY KEY", mFont, mSBWhite, 40, 40 );
+    }
+
     protected override void onMyPaint( System.Drawing.Graphics g )
     {
-        if( mScene == 0 ){
-            g.DrawString( "ジャンプアクション３ Jump Action3", mFont, mSBWhite, 15, 20 );
-            g.DrawString( "PRESS ANY KEY", mFont, mSBWhite, 40, 40 );
-            return;
-        }
-
+        drawList[mScene](g);
+        // if( mScene == 0 ){
+        //   g.DrawString( "ジャンプアクション３ Jump Action3", mFont, mSBWhite, 15, 20 );
+        //   g.DrawString( "PRESS ANY KEY", mFont, mSBWhite, 40, 40 );
+        //   return;
+        // }
+        /*
         g.TranslateTransform( 0, -50 + mCount / 16.0f );
         Map.draw( g );
         foreach( Player pl in mLPlayer ){
@@ -299,6 +297,7 @@ class JumpAct3 : MyForm
         if( sGameOver ){
             g.DrawString( "GAME OVER", mFont, mSBWhite, 40, 40 );
         }
+        */
     }
 
     protected override void onMyTimer( object sender, System.Timers.ElapsedEventArgs e )
