@@ -8,7 +8,6 @@ using InputFunc = System.Action<int, bool>;
 
 class JumpAct3 : MyForm
 {
-
     public enum Scene
     {
         Title,
@@ -16,9 +15,10 @@ class JumpAct3 : MyForm
         StageClear,
         GameOver
     }
-    public static Random      sRnd = new Random();
 
-    System.Drawing.Font       mFont = new System.Drawing.Font( "MS Gothic", 4 );
+    public static readonly Random               sRnd = new Random();
+
+    public static readonly System.Drawing.Font mFont = new System.Drawing.Font( "MS Gothic", 4 );
     int                       mCount;
     List<Player>              mLPlayer;
     List<Enemy>               mLEnemy;
