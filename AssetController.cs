@@ -53,7 +53,7 @@ public class AssetController
                             string src = reader.GetAttribute("src");
                             if(src == null || !System.IO.File.Exists(System.IO.Path.Combine(assetDir, src)))
                                 throw new System.Exception("No file is specified");
-                            mBM.Add(id, new Bitmap(src));
+                            mBM.Add(id, new Bitmap(System.IO.Path.Combine(assetDir, src)));
                             break;
                         }
                 }
