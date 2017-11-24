@@ -1,8 +1,8 @@
+//	#4 汎用的なプレイヤを表すクラス A class for generic player 2017/11/23 T.Umezawa
 using System;
 using System.Drawing; // Bitmap, Graphics,GraphicsUnit, Rectangle
 class Player : Unit
 {
-    static Bitmap[]	sBM = { new Bitmap( "player.png" ), new Bitmap( "player2.png" ) };
     static Rectangle	sRect = new Rectangle( 0, 0, 8, 8 );
 
     public int		mType;
@@ -14,9 +14,11 @@ class Player : Unit
 
     public void draw( Graphics g )
     {
+        if (JumpAct3.sAssets == null) return;
         sRect.X = ( (int)( mX * 8 ) & 1 ) * DOT;
         sRect.Y = Math.Sign( mDX ) * DTH + DTH;
-        g.DrawImage( sBM[ mType ], mX * DOT - DTH, mY * DOT - DTH, sRect, GraphicsUnit.Pixel );
+        g.DrawImage( JumpAct3.sAssets.mBM["player" + (mType + 1).ToString()],
+                     mX * DOT - DTH, mY * DOT - DTH, sRect, GraphicsUnit.Pixel );
     }
 
     public void jump()

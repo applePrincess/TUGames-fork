@@ -1,3 +1,4 @@
+//	#4 ゲーム内のマップ A map class 2017/11/23 T.Umezawa
 using System;
 using System.Drawing; // Bitmap, Graphics
 class Map

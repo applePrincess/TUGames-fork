@@ -16,6 +16,8 @@ class JumpAct3 : MyForm
         GameOver
     }
 
+    public static AssetController               sAssets;
+
     public static readonly Random               sRnd = new Random();
 
     public static readonly System.Drawing.Font mFont = new System.Drawing.Font( "MS Gothic", 4 );
@@ -32,6 +34,12 @@ class JumpAct3 : MyForm
     protected override void OnLoad( EventArgs e )
     {
         base.OnLoad( e );
+        // DEBUG: will be initialized in some other way.
+        SortedList<string, System.Drawing.Bitmap> imgs = new SortedList<string, System.Drawing.Bitmap>();
+        imgs.Add("player1", new System.Drawing.Bitmap("player.png"));
+        imgs.Add("player2", new System.Drawing.Bitmap("player2.png"));
+        imgs.Add("enemy",   new System.Drawing.Bitmap( "monster.png" ));
+        sAssets = new AssetController(new System.Drawing.Font( "MS Gothic", 4 ), imgs);
         mTimer.Interval = 25;
         mTimer.Start();
         inputTrigger.Add(Scene.Title, TitleInput);
@@ -56,18 +64,18 @@ class JumpAct3 : MyForm
 
     protected void TitleDraw( System.Drawing.Graphics g )
     {
-        g.DrawString( "ジャンプアクション３ Jump Action3", mFont, mSBWhite, 15, 20 );
-        g.DrawString( "PRESS ANY KEY", mFont, mSBWhite, 40, 40 );
+        g.DrawString( sAssets.GetStringAt("title1"), sAssets.DefaultFont, mSBWhite, 15, 20 );
+        g.DrawString( sAssets.GetStringAt("title2"), sAssets.DefaultFont, mSBWhite, 40, 40 );
     }
 
     protected void StageClearDraw( System.Drawing.Graphics g )
     {
-        g.DrawString( "STAGE CLEAR!", mFont, mSBWhite, 40, 40 );
+        g.DrawString(sAssets.GetStringAt("stageclear"), sAssets.DefaultFont, mSBWhite, 40, 40 );
     }
 
     protected void GameOverDraw( System.Drawing.Graphics g )
     {
-            g.DrawString( "GAME OVER", mFont, mSBWhite, 40, 40 );
+            g.DrawString( sAssets.GetStringAt("gameover"), sAssets.DefaultFont, mSBWhite, 40, 40 );
     }
 
     protected void StageDraw( System.Drawing.Graphics g )
@@ -83,14 +91,14 @@ class JumpAct3 : MyForm
 
         g.TranslateTransform( 0, 50 - mCount / 16.0f );
 
-        g.DrawString( "TIME " + mCount, mFont, mSBWhite, 0, 0 );
-        g.DrawString( "STAGE " + mStage, mFont, mSBWhite, 40, 0 );
+        g.DrawString( sAssets.GetStringAt("time") + mCount, sAssets.DefaultFont, mSBWhite, 0, 0 );
+        g.DrawString( sAssets.GetStringAt("stage") + mStage, sAssets.DefaultFont, mSBWhite, 40, 0 );
         if( sStageClear ){
-            g.DrawString( "STAGE CLEAR!", mFont, mSBWhite, 40, 40 );
+            g.DrawString( sAssets.GetStringAt("stageclear"), sAssets.DefaultFont, mSBWhite, 40, 40 );
         }
 
         if( sGameOver ){
-            g.DrawString( "GAME OVER", mFont, mSBWhite, 40, 40 );
+            g.DrawString( sAssets.GetStringAt("gameover"), sAssets.DefaultFont, mSBWhite, 40, 40 );
         }
     }
 

@@ -1,3 +1,4 @@
+//	#4 汎用的なユニットを表すクラス A class for generic unit 2017/11/23 T.Umezawa
 using System;
 class Unit
 {
