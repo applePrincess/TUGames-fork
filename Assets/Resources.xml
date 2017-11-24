@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <string id="title1">ジャンプアクション３ Jump Action3</string>
+  <string id="title2">PRESS ANY KEY</string>
+  <string id="stage-clear">STAGE CLEAR</string>
+  <string id="game-over">GAME OVER</string>
+  <string id="time">TIME</string>
+  <string id="stage">STAGE</string>
+  <font id="default" family="MS GOTHIC" size="4" />
+  <image id="player1" src="player.png" />
+  <image id="player2" src="player2.png" />
+</resources>
