@@ -1,10 +1,9 @@
 //	#4 ゲーム内のマップ A map class 2017/11/23 T.Umezawa
+
 using System;
 using System.Drawing; // Bitmap, Graphics
 class Map
 {
-    static readonly Bitmap	sBM = new Bitmap( "block.png" );
-
     public static byte[,]		sMap = new byte[ 16, 15 ];
 
     public static void GenerateMap(Random r)
@@ -31,7 +30,7 @@ class Map
         for( int y = 0; y < sMap.GetLength( 0 ); y++ ){
             for( int x = 0; x < sMap.GetLength( 1 ); x++ ){
                 if( sMap[ y, x ] != 0 ){
-                    g.DrawImage( sBM, x * 8, y * 8 );
+                    g.DrawImage( JumpAct3.sAssets.mBM["block"], x * 8, y * 8 );
                 }
             }
         }

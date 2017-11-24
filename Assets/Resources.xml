@@ -2,11 +2,13 @@
 <resources>
   <string id="title1">ジャンプアクション３ Jump Action3</string>
   <string id="title2">PRESS ANY KEY</string>
-  <string id="stage-clear">STAGE CLEAR</string>
-  <string id="game-over">GAME OVER</string>
+  <string id="stageclear">STAGE CLEAR</string>
+  <string id="gameover">GAME OVER</string>
   <string id="time">TIME</string>
   <string id="stage">STAGE</string>
   <font id="default" family="MS GOTHIC" size="4" />
   <image id="player1" src="player.png" />
   <image id="player2" src="player2.png" />
+  <image id="enemy" src="monster.png" />
+  <image id="block" src="block.png" />
 </resources>

@@ -20,7 +20,6 @@ class JumpAct3 : MyForm
 
     public static readonly Random               sRnd = new Random();
 
-    public static readonly System.Drawing.Font mFont = new System.Drawing.Font( "MS Gothic", 4 );
     int                       mCount;
     List<Player>              mLPlayer;
     List<Enemy>               mLEnemy;
@@ -34,12 +33,7 @@ class JumpAct3 : MyForm
     protected override void OnLoad( EventArgs e )
     {
         base.OnLoad( e );
-        // DEBUG: will be initialized in some other way.
-        SortedList<string, System.Drawing.Bitmap> imgs = new SortedList<string, System.Drawing.Bitmap>();
-        imgs.Add("player1", new System.Drawing.Bitmap("player.png"));
-        imgs.Add("player2", new System.Drawing.Bitmap("player2.png"));
-        imgs.Add("enemy",   new System.Drawing.Bitmap( "monster.png" ));
-        sAssets = new AssetController(new System.Drawing.Font( "MS Gothic", 4 ), imgs);
+        sAssets = new AssetController();
         mTimer.Interval = 25;
         mTimer.Start();
         inputTrigger.Add(Scene.Title, TitleInput);
